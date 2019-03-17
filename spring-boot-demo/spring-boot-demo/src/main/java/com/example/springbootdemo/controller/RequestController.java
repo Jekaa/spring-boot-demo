@@ -1,6 +1,8 @@
 package com.example.springbootdemo.controller;
 
+import com.example.springbootdemo.exceptions.NotFoundException;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -30,5 +32,13 @@ public class RequestController {
     @GetMapping
     public List<Map<String, String>> list() {
         return requests;
+    }
+
+    @GetMapping("{id}")
+    public Map<String, String> getOne(@PathVariable String id) {
+        return requests.stream()
+                .filter(m -> m.get("id").equals(id))
+                .findFirst()
+                .orElseThrow(NotFoundException::new);
     }
 }
